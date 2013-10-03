@@ -1,7 +1,8 @@
 require_relative '../../db/config'
 
 class Student < ActiveRecord::Base
-# implement your Student model here
+  belongs_to :teacher
+
   validates :email, :uniqueness => true
   validates :email, :format => { :with => /.+@{1}.+\.+.{2}/, :message => "not correct email format"}
   validates :age, :numericality => { :greater_than_or_equal_to => 5 }
@@ -23,6 +24,21 @@ class Student < ActiveRecord::Base
     end
   end
 
+  def self.distribute
+    # access teacher_id
+    self.all.each do |student|
+      student.teacher_id = rand(1..9)
+      student.save
+    end
+
+  end
+
+# def self.find_out
+#   p self.all.each do |x|
+#     p x
+#   end
+# end
+
 end
 
 # Experimenting w/ function to validate phone num
@@ -32,4 +48,7 @@ end
 # p sum.length
 # is_valid if sum.length >= 10
 
+#Student.distribute
 
+t = Student.new
+p t.methods.sort
